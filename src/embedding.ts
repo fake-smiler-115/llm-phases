@@ -1,17 +1,23 @@
 import { Corpus, Mergers, TokenizDataSet, Vocabulary, VocabularyMap } from "./types.ts";
 import { parseSentense } from "./word_frequency.ts";
 
-const  createIntoLegoPieces = (target : string, vocubalary : string[]) => {
+const findStartsWithWord = (word : string, vocabulary : string[]) : string => {
+  for (let index = 0; index < vocabulary.length; index++) {
+      if(word.startsWith(vocabulary[index])) {
+        return vocabulary[index];
+      }
+    }
+
+  return word;
+}
+
+const  createIntoLegoPieces = (target : string, vocabulary : string[]) => {
   const combinations = [];
   let word = target;
   while (word) {
-    for (let index = 0; index < vocubalary.length; index++) {
-      if(word.startsWith(vocubalary[index])) {
-        combinations.push(vocubalary[index]);
-        word = word.slice(vocubalary[index].length)
-        break;
-      }
-    }
+    const startsWithWord = findStartsWithWord(word, vocabulary);
+    combinations.push(startsWithWord);
+    word = word.slice(startsWithWord.length);
   }
 
   return combinations;
