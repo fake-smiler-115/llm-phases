@@ -36,7 +36,21 @@ const createTokenizDataSets = (corpus : Corpus, vocabularyMap : VocabularyMap, v
   return tokenizDataSet;
 }
 
+const createVectors = (vocabulary : string[]) => {
+  return vocabulary.map(symbol => {
+    const vectors:number[] = [];
+    for (let i =0; i < 4; i++) {
+      const fixedNumber = Math.random().toFixed(2);
+      const number = Math.random() > 0.5 ? Number(fixedNumber) : -Number(fixedNumber);
+      vectors.push(number);
+    }
+    return vectors;
+  })
+}
+
 export const applyEmbedding = (corpus : Corpus, vocabulary : Vocabulary, mergers : Mergers, vocabularyMap : VocabularyMap) => {
   const tokenizDataSet = createTokenizDataSets(corpus, vocabularyMap, vocabulary);
-  console.log(tokenizDataSet);
+  // console.log(tokenizDataSet);
+  const vectors = createVectors(vocabulary);
+  console.log({vectors, vocabulary});
 }
