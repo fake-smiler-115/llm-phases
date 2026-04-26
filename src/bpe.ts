@@ -50,9 +50,9 @@ export const tokeniz = (
   const words = convertIntoTheWordsChars(wordsFrequency);
   // const initialLenght = vocabulary.length;
   // vocabulary.length < 30000 condition loop run times
-  while (true) {
+  while (vocabulary.length < 50) {
     const pairs = generatePairs(words);
-    if(Object.keys(pairs).length === 0) break;
+    // if(Object.keys(pairs).length === 0) break;
     const mostCommonPair = findMostCommonPair(pairs);
     joinMostCommonPair(mostCommonPair, words);
     mergers.push(mostCommonPair.split('|'))

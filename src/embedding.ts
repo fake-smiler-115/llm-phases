@@ -1,26 +1,36 @@
-import { Corpus, Mergers, Vocabulary, VocabularyMap } from "./types.ts";
+import { Corpus, Mergers, TokenizDataSet, Vocabulary, VocabularyMap } from "./types.ts";
 import { parseSentense } from "./word_frequency.ts";
 
-const createIntoLegoPieces= (words : string[], vocabulary : Vocabulary) => {
-  // return words.map(word => {
-  //   if (vocabulary.includes(word)) return word;
+const  createIntoLegoPieces = (target : string, vocubalary : string[]) => {
+  const combinations = [];
+  let word = target;
+  while (word) {
+    for (let index = 0; index < vocubalary.length; index++) {
+      if(word.startsWith(vocubalary[index])) {
+        combinations.push(vocubalary[index]);
+        word = word.slice(vocubalary[index].length)
+        break;
+      }
+    }
+  }
 
-  // })
-  return words;
+  return combinations;
 }
 
 const createTokenizDataSets = (corpus : Corpus, vocabularyMap : VocabularyMap, vocabulary : Vocabulary,) => {
-  const tokenizDataSet = [];
+  const tokenizDataSet : TokenizDataSet[] = [];
   corpus.forEach(sentence =>  {
     const words = parseSentense(sentence).split(' ').filter(x => x);
-    const legoPeices = createIntoLegoPieces(words, vocabulary)
-    const tokenIds = words.map(word => vocabularyMap[word]);
-    console.log({sentence, words, tokenIds});
-    tokenizDataSet.push({sentence, words, tokenIds});
+    const legoPeices = words.map((word) => createIntoLegoPieces(word, vocabulary.toReversed()));
+    const tokenIds = legoPeices.map(symbols => symbols.map((symbol) => vocabularyMap[symbol]));
+    // console.log({sentence, words,legoPeices, tokenIds});
+    tokenizDataSet.push({sentence, words,legoPeices, tokenIds});
   });
 
+  return tokenizDataSet;
 }
 
 export const applyEmbedding = (corpus : Corpus, vocabulary : Vocabulary, mergers : Mergers, vocabularyMap : VocabularyMap) => {
   const tokenizDataSet = createTokenizDataSets(corpus, vocabularyMap, vocabulary);
+  console.log(tokenizDataSet);
 }

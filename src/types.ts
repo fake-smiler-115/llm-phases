@@ -28,3 +28,10 @@ export type  VocabularyMap = {
 }
 
 export type Corpus = string[];
+
+export type TokenizDataSet = {
+  sentence : string;
+  words : string[];
+  legoPeices : string[][];
+  tokenIds : number[][];
+}
