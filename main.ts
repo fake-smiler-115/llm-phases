@@ -1,10 +1,14 @@
 import { applyTokenization } from "./src/bpe.ts";
 import { applyEmbedding } from "./src/embedding.ts";
+import { createPositionVectors } from "./src/positionEmbedding.ts";
 import { Corpus } from "./src/types.ts";
 
 const main = (corpus: Corpus) => {
+  const contextTokensSize = 5;
+  const noOfVectors = 4;
   const { vocabulary, mergers, vocabularyMap } = applyTokenization(corpus);
-  applyEmbedding(corpus, vocabulary, mergers, vocabularyMap);
+  const {tokenizDataSet, vectors} = applyEmbedding(corpus, vocabulary, mergers, vocabularyMap, noOfVectors);
+  const positionVectors = createPositionVectors(contextTokensSize, noOfVectors);
 };
 
 const corpus = [

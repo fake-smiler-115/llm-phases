@@ -29,17 +29,17 @@ const createTokenizDataSets = (corpus : Corpus, vocabularyMap : VocabularyMap, v
     const words = parseSentense(sentence).split(' ').filter(x => x);
     const legoPeices = words.map((word) => createIntoLegoPieces(word, vocabulary.toReversed()));
     const tokenIds = legoPeices.map(symbols => symbols.map((symbol) => vocabularyMap[symbol]));
-    // console.log({sentence, words,legoPeices, tokenIds});
+    console.log({sentence, words,legoPeices, tokenIds});
     tokenizDataSet.push({sentence, words,legoPeices, tokenIds});
   });
 
   return tokenizDataSet;
 }
 
-const createVectors = (vocabulary : string[]) => {
+const createVectors = (vocabulary : string[], noOfVectors : number) => {
   return vocabulary.map(symbol => {
     const vectors:number[] = [];
-    for (let i =0; i < 4; i++) {
+    for (let i =0; i < noOfVectors; i++) {
       const fixedNumber = Math.random().toFixed(2);
       const number = Math.random() > 0.5 ? Number(fixedNumber) : -Number(fixedNumber);
       vectors.push(number);
@@ -48,9 +48,10 @@ const createVectors = (vocabulary : string[]) => {
   })
 }
 
-export const applyEmbedding = (corpus : Corpus, vocabulary : Vocabulary, mergers : Mergers, vocabularyMap : VocabularyMap) => {
+export const applyEmbedding = (corpus : Corpus, vocabulary : Vocabulary, mergers : Mergers, vocabularyMap : VocabularyMap, noOfVectors : number) => {
   const tokenizDataSet = createTokenizDataSets(corpus, vocabularyMap, vocabulary);
   // console.log(tokenizDataSet);
-  const vectors = createVectors(vocabulary);
+  const vectors = createVectors(vocabulary, noOfVectors);
   console.log({vectors, vocabulary});
+  return {tokenizDataSet, vectors};
 }

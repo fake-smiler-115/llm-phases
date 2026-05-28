@@ -83,3 +83,7 @@ export const applyTokenization = (corpus: string[]) => {
 
   return { vocabulary, mergers, vocabularyMap };
 };
+
+// ths is applyEmbedding.
+
+// [t h i s] [$ i s] []
