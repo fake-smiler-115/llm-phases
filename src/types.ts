@@ -1,11 +1,11 @@
-export type WordsFrequency ={
-[key : string] : number
-}
+export type WordsFrequency = {
+  [key: string]: number;
+};
 
-export type Words =  {
-    symbols: string[];
-    freq: number;
-}[]
+export type Words = {
+  symbols: string[];
+  freq: number;
+}[];
 
 // type Pair = {
 //   firstSymbol : string,
@@ -16,22 +16,35 @@ export type Words =  {
 // export type Pairs = Pair[]
 
 export type Pairs = {
-  [key : string] : number
-}
+  [key: string]: number;
+};
 
 export type Vocabulary = string[];
 
 export type Mergers = string[][];
 
-export type  VocabularyMap = {
-  [key : string] : number
-}
+export type VocabularyMap = {
+  [key: string]: number;
+};
 
 export type Corpus = string[];
 
 export type TokenizDataSet = {
-  sentence : string;
-  words : string[];
-  legoPeices : string[][];
-  tokenIds : number[][];
-}
+  sentence: string;
+  words: string[];
+  legoPeices: string[][];
+  tokenIds: number[][];
+};
+
+export type Matrix = number[][];
+
+export type SelfAttentionResult = {
+  queries: Matrix;
+  keys: Matrix;
+  values: Matrix;
+  keyTranspose: Matrix;
+  scores: Matrix;
+  scaledScores: Matrix;
+  attentionWeights: Matrix;
+  output: Matrix;
+};
