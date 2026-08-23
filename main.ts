@@ -1,7 +1,7 @@
 import { applyTokenization } from "./src/bpe.ts";
 import { applyEmbedding } from "./src/embedding.ts";
 import { createPositionVectors } from "./src/positionEmbedding.ts";
-import { selfAttention } from "./src/selfAttention.ts";
+import { printMatrix, selfAttention } from "./src/selfAttention.ts";
 import { Corpus, Matrix } from "./src/types.ts";
 
 const addVectors = (left: number[], right: number[]): number[] =>
@@ -30,7 +30,7 @@ const main = (corpus: Corpus) => {
     addVectors(vectors[tokenId], positionVectors[index]),
   );
 
-  console.log({ firstDataSet, tokenIds, tokenLabels, input });
+  console.log({ firstDataSet, tokenIds, tokenLabels });
 
   const queryWeights: Matrix = [
     [1, 0, 1],
@@ -51,6 +51,10 @@ const main = (corpus: Corpus) => {
     [1, 1, 0],
   ];
 
+  printMatrix("X", input);
+  printMatrix("Wq", queryWeights);
+  printMatrix("Wk", keyWeights);
+  printMatrix("Wv", valueWeights);
   selfAttention(input, queryWeights, keyWeights, valueWeights, tokenLabels);
 };
 

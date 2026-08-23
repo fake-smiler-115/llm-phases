@@ -42,7 +42,6 @@ export type SelfAttentionResult = {
   queries: Matrix;
   keys: Matrix;
   values: Matrix;
-  keyTranspose: Matrix;
   scores: Matrix;
   scaledScores: Matrix;
   attentionWeights: Matrix;
