@@ -10,7 +10,7 @@ export const printMatrix = (name: string, matrix: Matrix): void => {
   console.table(matrix);
 };
 
-const multiplyMatrices = (left: Matrix, right: Matrix): Matrix => {
+export const multiplyMatrices = (left: Matrix, right: Matrix): Matrix => {
   const [leftRows, leftColumns] = getDimensions(left);
   const [, rightColumns] = getDimensions(right);
 

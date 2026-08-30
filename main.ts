@@ -1,11 +1,22 @@
 import { applyTokenization } from "./src/bpe.ts";
 import { applyEmbedding } from "./src/embedding.ts";
 import { createPositionVectors } from "./src/positionEmbedding.ts";
-import { printMatrix, selfAttention } from "./src/selfAttention.ts";
-import { Corpus, Matrix } from "./src/types.ts";
+import { printMatrix } from "./src/selfAttention.ts";
+import { transformerBlock } from "./src/transformerBlock.ts";
+import {
+  Corpus,
+  FeedForwardWeights,
+  LayerNormParams,
+  Matrix,
+} from "./src/types.ts";
 
 const addVectors = (left: number[], right: number[]): number[] =>
   left.map((value, index) => value + right[index]);
+
+const intilazeNorms = () => ({
+  gamma: [1, 1, 1, 1],
+  beta: [0, 0, 0, 0],
+});
 
 const main = (corpus: Corpus) => {
   const contextTokensSize = 5;
@@ -33,29 +44,62 @@ const main = (corpus: Corpus) => {
   console.log({ firstDataSet, tokenIds, tokenLabels });
 
   const queryWeights: Matrix = [
-    [1, 0, 1],
-    [0, 1, 1],
-    [1, 1, 0],
-    [1, 0, 0],
+    [1, 0, 1, 0],
+    [0, 1, 1, 0],
+    [1, 1, 0, 0],
+    [1, 0, 0, 1],
   ];
   const keyWeights: Matrix = [
-    [1, 0, 0],
-    [0, 1, 0],
-    [1, 1, 0],
-    [0, 0, 1],
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [1, 1, 0, 0],
+    [0, 0, 1, 1],
   ];
   const valueWeights: Matrix = [
-    [1, 0, 0],
-    [0, 1, 0],
-    [0, 0, 1],
-    [1, 1, 0],
+    [1, 0, 0, 0],
+    [0, 1, 0, 1],
+    [0, 0, 1, 0],
+    [1, 1, 0, 0],
   ];
+
+  const layerNorm1Params: LayerNormParams = intilazeNorms();
+  const layerNorm2Params: LayerNormParams = intilazeNorms();
+
+  const feedForwardWeights: FeedForwardWeights = {
+    w1: [
+      [0.2, -0.1, 0.3, 0.1, -0.2, 0.4, 0.1, -0.3],
+      [0.1, 0.2, -0.3, 0.4, 0.1, -0.1, 0.2, 0.3],
+      [-0.2, 0.3, 0.1, -0.4, 0.2, 0.1, -0.3, 0.2],
+      [0.4, -0.2, 0.1, 0.2, -0.1, 0.3, -0.2, 0.1],
+    ],
+    b1: [0, 0, 0, 0, 0, 0, 0, 0],
+    w2: [
+      [0.1, -0.2, 0.3, 0.1],
+      [0.2, 0.1, -0.1, 0.3],
+      [-0.3, 0.2, 0.1, -0.1],
+      [0.1, 0.3, -0.2, 0.2],
+      [0.2, -0.1, 0.1, 0.1],
+      [-0.1, 0.2, 0.3, -0.2],
+      [0.1, 0.1, -0.2, 0.3],
+      [0.3, -0.1, 0.2, -0.1],
+    ],
+    b2: [0, 0, 0, 0],
+  };
 
   printMatrix("X", input);
   printMatrix("Wq", queryWeights);
   printMatrix("Wk", keyWeights);
   printMatrix("Wv", valueWeights);
-  selfAttention(input, queryWeights, keyWeights, valueWeights, tokenLabels);
+  transformerBlock(
+    input,
+    queryWeights,
+    keyWeights,
+    valueWeights,
+    layerNorm1Params,
+    feedForwardWeights,
+    layerNorm2Params,
+    tokenLabels,
+  );
 };
 
 const corpus = [
