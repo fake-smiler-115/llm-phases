@@ -90,6 +90,7 @@ const main = (corpus: Corpus) => {
   printMatrix("Wq", queryWeights);
   printMatrix("Wk", keyWeights);
   printMatrix("Wv", valueWeights);
+
   transformerBlock(
     input,
     queryWeights,

@@ -91,10 +91,11 @@ export const transformerBlock = (
   printMatrix("LayerNorm 1 output", norm1);
 
   const ffnOutput = feedForward(norm1, feedForwardWeights);
+  printMatrix("FFN(norm1)", ffnOutput);
+
   const residual2 = addMatrices(norm1, ffnOutput);
   const norm2 = layerNorm(residual2, layerNorm2Params);
 
-  printMatrix("FFN(norm1)", ffnOutput);
   printMatrix("Residual 2 = norm1 + FFN(norm1)", residual2);
   printMatrix("LayerNorm 2 output (Transformer block output)", norm2);
 
